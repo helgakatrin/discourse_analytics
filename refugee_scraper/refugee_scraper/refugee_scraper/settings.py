@@ -9,10 +9,18 @@
 #     http://scrapy.readthedocs.org/en/latest/topics/downloader-middleware.html
 #     http://scrapy.readthedocs.org/en/latest/topics/spider-middleware.html
 
-import sys
-sys.path.append('/Users/helga/code/refugee_scraper/refugee_app/refugee_app')
-
 import os
+import sys
+
+"""
+try:
+    import local_settings
+except ImportError:
+    sys.exit('Make sure you have local_settings.py setup correctly')
+"""
+
+#sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../..' )
+sys.path.append('/Users/levy/code/discourse_analytics/refugee_app/refugee_app')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'refugee_app.settings'
 
 import django

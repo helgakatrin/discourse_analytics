@@ -1,8 +1,8 @@
 from django.db import models
 
 class Post(models.Model):
-    title = models.CharField(max_length=254)
-    body = models.TextField()
+    title = models.CharField(max_length=254, null=True, blank=True)
+    body = models.TextField(null=True, blank=True)
     posted = models.DateField(null=True)
     url = models.URLField()    
 
