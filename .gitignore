@@ -1,0 +1,4 @@
+venv
+refugee_app/refugee_app/db.sqlite3
+*.pyc
+refugee_app/refugee_app/media
