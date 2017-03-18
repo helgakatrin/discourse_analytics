@@ -19,8 +19,7 @@ except ImportError:
     sys.exit('Make sure you have local_settings.py setup correctly')
 """
 
-#sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../..' )
-sys.path.append('/Users/levy/code/discourse_analytics/refugee_app/refugee_app')
+sys.path.append(os.path.dirname(os.path.abspath(__file__)) + '/../../../refugee_app/refugee_app')
 os.environ['DJANGO_SETTINGS_MODULE'] = 'refugee_app.settings'
 
 import django
