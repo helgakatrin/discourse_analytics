@@ -3,3 +3,4 @@ refugee_app/refugee_app/db.sqlite3
 *.pyc
 refugee_app/refugee_app/media
 notes.txt.py
+refugee_app/refugee_app/refugee_app/settings_local.py
