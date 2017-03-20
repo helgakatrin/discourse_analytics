@@ -7,14 +7,13 @@ import locale
 class VisirNewsSpider(scrapy.Spider):
     name = "visir_news"
     allowed_domains = ["visir.is"]
+    download_delay = 2
+    USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.102 Safari/537.36"
 
     def start_requests(self):
         locale.setlocale(locale.LC_ALL, 'is_IS')
         for i in range(1,1000):
             yield scrapy.Request('http://www.visir.is/section/FRETTIR?page={}'.format(i), self.parse)
-
-    download_delay = 2
-    USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.102 Safari/537.36"
 
 
     def parse(self, response):
@@ -37,12 +36,6 @@ class VisirNewsSpider(scrapy.Spider):
         except IndexError:
             item['posted'] = None
         else:
-            """
-            month = posted.split()[1].title()
-            splitted = posted.split()
-            splitted[1] = month
-            posted = ' '.join(splitted)
-            """
             try:
                 item['posted'] = datetime.strptime(posted, '%d. %B %Y').date()
             except:
@@ -51,6 +44,3 @@ class VisirNewsSpider(scrapy.Spider):
         #item['posted'] = datetime.datetime.now().date()
         #request = scrapy.Request(url, callback=self.parse_comments, meta={'item': item})        
         yield item
-
-    def parse_comments(self, response):
-        item = response.meta['item']

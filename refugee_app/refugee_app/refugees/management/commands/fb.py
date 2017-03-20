@@ -17,29 +17,40 @@ class Command(BaseCommand):
 
         payload = {'ids': ''}
         headers = {'Authorization': 'OAuth {}'.format(FB_API_KEY)}
+        comment_list = Comment.objects.values_list('pk', flat=True)
 
-        for post in Post.objects.all():
-            if not Comment.objects.filter(post=post).exists():
-                payload['ids'] = post.url
-                res = requests.get(fb_url, params=payload, headers=headers)
-                logger.debug(res.url)
-                
+        for post in Post.objects.exclude(comment__id__in=comment_list):
+            #if not Comment.objects.filter(post=post).exists():
+            payload['ids'] = post.url
+            res = requests.get(fb_url, params=payload, headers=headers)
+            logger.debug(res.url)
+            
+            try:
+                fb_obj = res.json()[post.url]['og_object']['id']
+            except KeyError as err:
+                logger.error('URL not found in Facebook response: {}'.format(res.json()))
+            else:
+                res = requests.get(fb_url_comments.format(fb_obj), headers=headers)
+                logger.debug(res.json())
+
                 try:
-                    fb_obj = res.json()[post.url]['og_object']['id']
-                except KeyError as err:
-                    logger.error('URL not found in Facebook response: {}'.format(res.json()))
+                    fb_data = res.json()['data']
+                except KeyError:
+                    logger.info('No data attribute found: {}'.format(res.json()))
+                    continue
                 else:
-                    res = requests.get(fb_url_comments.format(fb_obj), headers=headers)
-                    logger.debug(res.json())
-
-
                     for item in res.json()['data']:
                         if item:
                             fb_author, created = FBAuthor.objects.update_or_create(
                                 fb_id=item['from']['id'],
                                 defaults={
                                     'name': item['from']['name']
-                                })                
+                                })
+                            if created:
+                                logger.debug('Author added: {}'.format(fb_author))
+                            else:
+                                logger.debug('Author updated: {}'.format(fb_author))
+
                             comment, created = Comment.objects.update_or_create(
                                 fb_comment_id=item['id'],
                                 defaults={
@@ -49,6 +60,10 @@ class Command(BaseCommand):
                                     'like_count': item['like_count'],
                                     'fb_author': fb_author
                                 })
+                            if created:
+                                logger.debug('Comment added: {}'.format(comment))
+                            else:
+                                logger.debug('Comment updated: {}'.format(comment))
+                        else:
+                            logger.debug('No item found: {}'.format(re.json()))
                     time.sleep(1)
-            else:
-                logger.debug('Comments already scraped, skipping..')

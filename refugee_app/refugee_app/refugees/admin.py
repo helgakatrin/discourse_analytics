@@ -4,12 +4,14 @@ from .models import Post, Comment, FacebookPost, FBAuthor
 class AuthorCommentInline(admin.TabularInline):
     model = Comment
     extra = 0
-    
-class PostAdmin(admin.ModelAdmin):
-    list_display = ['title', 'body', 'posted', 'url']
 
 class CommentAdmin(admin.ModelAdmin):
     pass
+    
+class PostAdmin(admin.ModelAdmin):
+    list_display = ['title', 'body', 'posted', 'url']
+    search_fields = ['url', 'body']
+    
 
 class FacebookPostAdmin(admin.ModelAdmin):
     pass
