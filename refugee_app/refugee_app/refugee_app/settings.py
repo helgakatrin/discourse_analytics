@@ -100,11 +100,28 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+import os
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'DEBUG'),
+        },
+    },
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.10/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+LANGUAGE_CODE = 'is'
 
 TIME_ZONE = 'UTC'
 
@@ -120,3 +137,10 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+"""
+try:
+    from settings_local import *
+except ImportError:
+    sys.exit('Make sure you have local_settings.py setup correctly!')
+"""
