@@ -44,9 +44,10 @@ class Command(BaseCommand):
 
         textList = Text(word_list)
 
-        #textList.concordance('hæli')
+        textList.concordance('hæli')
         #textList.concordance('hælisleitendur')
         #textList.concordance('hælisleitenda')
+        print(textList)
 
         #similar:
 
@@ -57,6 +58,8 @@ class Command(BaseCommand):
 
         #textList.count("hælisleitandi") 
         #print(textList.count("hælisleitandi"))
+
+        # 
 
 
 
