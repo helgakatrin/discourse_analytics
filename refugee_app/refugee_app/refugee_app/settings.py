@@ -138,9 +138,8 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-"""
+
 try:
-    from settings_local import *
+    from .settings_local import *
 except ImportError:
     sys.exit('Make sure you have local_settings.py setup correctly!')
-"""
