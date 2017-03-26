@@ -4,3 +4,5 @@ refugee_app/refugee_app/db.sqlite3
 refugee_app/refugee_app/media
 notes.txt.py
 refugee_app/refugee_app/refugee_app/settings_local.py
+notes.txt
+refugee_app/refugee_app/data.json
