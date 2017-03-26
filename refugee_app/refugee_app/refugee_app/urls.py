@@ -15,7 +15,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from refugees import views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
+    url(r'^bubbles/$', views.bubbles, name='bubbles'),
+    url(r'^api/post/$', views.api_post, name='api_post'),
 ]

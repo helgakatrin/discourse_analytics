@@ -4,23 +4,23 @@ from refugee_scraper.items import RefugeeScraperItem
 from datetime import datetime
 import locale
 
-class VisirNewsSpider(scrapy.Spider):
-    name = "visir_news"
-    allowed_domains = ["visir.is"]
+class UtvarpSagaNewsSpider(scrapy.Spider):
+    name = "utvarp_saga_news"
+    allowed_domains = ["utvarpsaga.is"]
     download_delay = 2
     USER_AGENT = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_6_8) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/32.0.1700.102 Safari/537.36"
 
     def start_requests(self):
         locale.setlocale(locale.LC_ALL, 'is_IS')
         for i in range(1,1000):
-            yield scrapy.Request('http://www.visir.is/section/FRETTIR?page={}'.format(i), self.parse)
+            yield scrapy.Request('http://utvarpsaga.is/frettir/page/{}/'.format(i), self.parse)
 
 
     def parse(self, response):
 
-        for sel in response.xpath('//div[@class="newslists clearfix"]/div[@class="x6 lbf"]/div[@class="x6 ml0"]/div[contains(@class, "newsitem")]'):
+        for sel in response.xpath('//div[@class="entry-list-right"]'):
             #item['title'] = sel.xpath('h3/a/text()').extract_first()
-            url = response.urljoin(sel.xpath('h3/a/@href').extract_first())            
+            url = response.urljoin(sel.xpath('h2/a/@href').extract_first())            
             request = scrapy.Request(url, callback=self.parse_article)
             yield request            
     
@@ -28,11 +28,11 @@ class VisirNewsSpider(scrapy.Spider):
         
         self.logger.info('Locale: {}'.format(locale.getlocale()))
         item = RefugeeScraperItem()
-        item['title'] = response.xpath('//h1[@itemprop="headline"]/text()').extract_first()
-        item['body'] = ' '.join(response.xpath('//div[@itemprop="articleBody"]/p/hardreturn/text()').extract())
+        item['title'] = response.xpath('//h1[@class="entry-title"]/text()').extract_first()
+        item['body'] = ' '.join(response.xpath('//div[@class="entry-content"]/p/text()').extract())
         item['url'] = response.url
         try:
-            posted = response.xpath('//div[contains(@class, "FRETTIR-cat")]/span[@class="date"]/text()').extract()[1]
+            posted = response.xpath('//time/text()').extract()[0]
         except IndexError:
             item['posted'] = None
         else:

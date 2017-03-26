@@ -5,7 +5,7 @@ class Post(models.Model):
     body = models.TextField(default='')
     posted = models.DateField(null=True)
     url = models.URLField()    
-
+    has_scraped_comments = models.BooleanField(default=False)
     def __str__(self):
         return self.title
 
@@ -26,8 +26,12 @@ class FBAuthor(models.Model):
     name = models.CharField(max_length=256, null=True, blank=True)
     fb_id = models.CharField(max_length=256, unique=True)
 
+    def __str__(self):
+        return self.name
+
 class Comment(models.Model):    
     body = models.TextField()
+    body_stemmed = models.TextField(null=True, blank=True)
     posted = models.DateField(null=True, blank=True)
     fb_created_time = models.DateTimeField(null=True, blank=True)
     author = models.CharField(max_length=254, blank=True)
@@ -38,6 +42,20 @@ class Comment(models.Model):
     fb_author = models.ForeignKey(FBAuthor, null=True, blank=True)
     like_count = models.IntegerField(null=True, blank=True)
     fb_comment_id = models.CharField(max_length=256, unique=True, null=True, blank=True)
+    word_category = models.ManyToManyField('WordCategory')
 
     def __str__(self):
         return self.body
+
+class WordCategory(models.Model):
+    word = models.CharField(max_length=256)
+    category = models.ForeignKey('CategoryType', null=True, blank=True)
+
+    def __str__(self):
+        return self.word
+
+class CategoryType(models.Model):
+    title = models.CharField(max_length=256)
+
+    def __str__(self):
+        return self.title
