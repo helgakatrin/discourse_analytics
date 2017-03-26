@@ -14,7 +14,7 @@ def bubbles(request):
 
 @csrf_exempt
 def api_post(request):
-    posts = Comment.objects.values_list('body_stemmed', flat=True)
+    posts = Comment.objects.values_list('body', flat=True)
 
     word_list = []
     result = []
