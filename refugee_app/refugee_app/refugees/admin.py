@@ -12,6 +12,7 @@ class CommentAdmin(admin.ModelAdmin):
 class PostAdmin(admin.ModelAdmin):
     list_display = ['title', 'body', 'posted', 'url', 'has_scraped_comments']
     search_fields =  ['url','body']
+    list_filter = ('has_scraped_comments', )
 
 class WordCategoryAdmin(admin.ModelAdmin):
     list_display = ['word', 'category']

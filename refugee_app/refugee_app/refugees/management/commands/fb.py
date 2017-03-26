@@ -19,11 +19,11 @@ class Command(BaseCommand):
         headers = {'Authorization': 'OAuth {}'.format(FB_API_KEY)}
         comment_list = Comment.objects.values_list('pk', flat=True)
 
-        for post in Post.objects.exclude(comment__id__in=comment_list):
+        for post in Post.objects.exclude(has_scraped_comments=True):
             #if not Comment.objects.filter(post=post).exists():
             payload['ids'] = post.url
             res = requests.get(fb_url, params=payload, headers=headers)
-            logger.debug(res.url)
+            logger.info(res.url)
             
             try:
                 fb_obj = res.json()[post.url]['og_object']['id']
@@ -31,7 +31,7 @@ class Command(BaseCommand):
                 logger.error('URL not found in Facebook response: {}'.format(res.json()))
             else:
                 res = requests.get(fb_url_comments.format(fb_obj), headers=headers)
-                logger.debug(res.json())
+                logger.info(res.json())
 
                 try:
                     fb_data = res.json()['data']
@@ -47,7 +47,7 @@ class Command(BaseCommand):
                                     'name': item['from']['name']
                                 })
                             if created:
-                                logger.debug('Author added: {}'.format(fb_author))
+                                logger.info('Author added: {}'.format(fb_author))
                             else:
                                 logger.debug('Author updated: {}'.format(fb_author))
 
@@ -61,11 +61,11 @@ class Command(BaseCommand):
                                     'fb_author': fb_author
                                 })
                             if created:
-                                logger.debug('Comment added: {}'.format(comment))
+                                logger.info('Comment added: {}'.format(comment))
                             else:
-                                logger.debug('Comment updated: {}'.format(comment))
+                                logger.info('Comment updated: {}'.format(comment))
                         else:
-                            logger.debug('No item found: {}'.format(re.json()))
+                            logger.info('No item found: {}'.format(re.json()))
                     post.has_scraped_comments = True
                     post.save()
                     time.sleep(0.5)
