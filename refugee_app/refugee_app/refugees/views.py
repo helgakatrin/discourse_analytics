@@ -23,8 +23,6 @@ def api_post(request):
             for item in post.split():
                 word_list.append(item)
     
-    
-    
     fdist = FreqDist(word_list)
 
 

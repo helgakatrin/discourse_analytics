@@ -66,4 +66,6 @@ class Command(BaseCommand):
                                 logger.debug('Comment updated: {}'.format(comment))
                         else:
                             logger.debug('No item found: {}'.format(re.json()))
-                    time.sleep(1)
+                    post.has_scraped_comments = True
+                    post.save()
+                    time.sleep(0.5)

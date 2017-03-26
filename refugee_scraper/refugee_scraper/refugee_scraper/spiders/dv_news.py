@@ -34,7 +34,7 @@ class DVNewsSpider(scrapy.Spider):
         self.logger.info('Locale: {}'.format(locale.getlocale()))
         item = RefugeeScraperItem()
         item['title'] = response.xpath('//h1[contains(@class, "headline")]/text()').extract_first()
-        item['body'] = ''.join(response.xpath('//div[@class="text_body"]/p/text()').extract())
+        item['body'] = ' '.join(response.xpath('//div[@class="text_body"]/p/text()').extract())
         item['url'] = response.url
         try:
             posted = response.xpath('//span[contains(@class, "date")]/text()').extract_first()

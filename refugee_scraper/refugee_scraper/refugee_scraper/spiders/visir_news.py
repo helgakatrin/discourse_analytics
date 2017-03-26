@@ -29,7 +29,7 @@ class VisirNewsSpider(scrapy.Spider):
         self.logger.info('Locale: {}'.format(locale.getlocale()))
         item = RefugeeScraperItem()
         item['title'] = response.xpath('//h1[@itemprop="headline"]/text()').extract_first()
-        item['body'] = ''.join(response.xpath('//div[@itemprop="articleBody"]/p/hardreturn/text()').extract())
+        item['body'] = ' '.join(response.xpath('//div[@itemprop="articleBody"]/p/hardreturn/text()').extract())
         item['url'] = response.url
         try:
             posted = response.xpath('//div[contains(@class, "FRETTIR-cat")]/span[@class="date"]/text()').extract()[1]

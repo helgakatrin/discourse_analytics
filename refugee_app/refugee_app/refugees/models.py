@@ -5,7 +5,7 @@ class Post(models.Model):
     body = models.TextField(default='')
     posted = models.DateField(null=True)
     url = models.URLField()    
-
+    has_scraped_comments = models.BooleanField(default=False)
     def __str__(self):
         return self.title
 
@@ -28,7 +28,7 @@ class FBAuthor(models.Model):
 
     def __str__(self):
         return self.name
-        
+
 class Comment(models.Model):    
     body = models.TextField()
     body_stemmed = models.TextField(null=True, blank=True)
