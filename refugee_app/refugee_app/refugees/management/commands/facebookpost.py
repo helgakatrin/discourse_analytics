@@ -17,11 +17,10 @@ class Command(BaseCommand):
         posts = FacebookPost.objects.values_list('body', flat=True)
         my_list = []
         word_list = []
-        for post in posts:
-            my_list.append(post[0])
         
-        for sentence in my_list:
-            for word in sentence.split():
+        for post in posts:
+            word_in_post = post.split()
+            for word in word_in_post:
                 word_list.append(word)
         
         # Skoða algengustu orðin:
@@ -47,12 +46,12 @@ class Command(BaseCommand):
 
         #frekar svona: 
 
-        freq_words = [w for w in (word_list) if len(w) >7 and fdist[w] >3]
+        freq_words = [w for w in (word_list) if len(w) >7]
         c = Counter(freq_words)
 
         print(c)
 
-        for word, frequency in c.most_common(100):
+        for word, frequency in c.most_common(200):
         
             print('{} - {}'.format(word, frequency))
 
@@ -61,7 +60,7 @@ class Command(BaseCommand):
 
         textList = Text(word_list)
 
-        textList.concordance(settings.SEARCH_TERM)
+        #textList.concordance(settings.SEARCH_TERM)
 
         # Til að búa til collocations, 2 orð sem fara saman
         #textList.collocations()

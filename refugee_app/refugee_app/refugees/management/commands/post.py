@@ -17,11 +17,10 @@ class Command(BaseCommand):
         posts = Post.objects.values_list('body', flat=True)
         my_list = []
         word_list = []
+
         for post in posts:
-            my_list.append(post[0])
-        
-        for sentence in my_list:
-            for word in sentence.split():
+            words_in_post = post.split()
+            for word in words_in_post:
                 word_list.append(word)            
 
         # Skoða algengustu orðin:
@@ -47,7 +46,7 @@ class Command(BaseCommand):
 
         print(c)
 
-        for word, frequency in c.most_common(100):
+        for word, frequency in c.most_common(200):
         
             print('{} - {}'.format(word, frequency))
 
