@@ -20,5 +20,6 @@ from refugees import views
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^bubbles/$', views.bubbles, name='bubbles'),
+    url(r'^aggregation/$', views.aggregation, name='aggregation'),
     url(r'^api/post/$', views.api_post, name='api_post'),
 ]

@@ -22,7 +22,7 @@ class Command(BaseCommand):
         
         for sentence in my_list:
             for word in sentence.split():
-                word_list.append(word)            
+                word_list.append(word)
 
         # Skoða algengustu orðin:
 
