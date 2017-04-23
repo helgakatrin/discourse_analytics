@@ -38,6 +38,20 @@ class Comment(models.Model):
     fb_author = models.ForeignKey(FBAuthor, null=True, blank=True)
     like_count = models.IntegerField(null=True, blank=True)
     fb_comment_id = models.CharField(max_length=256, unique=True, null=True, blank=True)
+    word_category = models.ManyToManyField('WordCategory')
 
+    def __str__(self):
+        return self.body
+
+# þetta á að vera inni
+class WordCategory(models.Model):
+    word = models.CharField(max_length=256)
+    category = models.ForeignKey('CategoryType', null=True, blank=True)
+
+    def __str__(self):
+        return self.word
+
+class CategoryType(models.Model):
+    title = models.CharField(max_length=256)
     def __str__(self):
         return self.body
