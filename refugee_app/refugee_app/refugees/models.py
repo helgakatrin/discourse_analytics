@@ -47,6 +47,7 @@ class Comment(models.Model):
     def __str__(self):
         return self.body
 
+# þetta á að vera inni
 class WordCategory(models.Model):
     word = models.CharField(max_length=256)
     category = models.ForeignKey('CategoryType', null=True, blank=True)
