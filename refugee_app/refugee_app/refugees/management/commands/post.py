@@ -7,9 +7,20 @@ from nltk.text import Text
 from nltk import FreqDist, bigrams
 from collections import Counter
 from django.conf import settings
+import csv
+from datetime import datetime
 
 class Command(BaseCommand):
     help = "some nltk stuff from visir.is and dv.is spider"
+
+    def csv_export(self, word_list):
+        with open('{}.csv'.format(datetime.strftime(datetime.now(), '%Y-%m-%d-%H-%M-%S')), 'w+') as csv_file:
+            fieldnames = ['word', 'frequency']
+            writer = csv.DictWriter(csv_file, fieldnames=fieldnames)
+            writer.writeheader()
+            
+            for data in word_list:
+                writer.writerow({'word': data['word'], 'frequency': data['frequency']})
 
     def handle(self, *args, **options):
         
@@ -17,7 +28,9 @@ class Command(BaseCommand):
         posts = Post.objects.values_list('body', flat=True)
         my_list = []
         word_list = []
+
         for post in posts:
+
             my_list.append(post[0])
         
         for sentence in my_list:
@@ -27,7 +40,7 @@ class Command(BaseCommand):
         # Skoða algengustu orðin:
 
         fdist = FreqDist(word_list)
-        print(fdist.most_common(200))  
+        #print(fdist.most_common(200))  
 
         # Leita að orðum sem eru meira en 15 stafir:
 
@@ -45,9 +58,11 @@ class Command(BaseCommand):
         freq_words = [w for w in (word_list) if len(w) >7 and fdist[w] >3]
         c = Counter(freq_words)
 
-        print(c)
+        #print(c)
+        data = [{'word': word, 'frequency': frequency} for word, frequency in c.most_common(200)]
+        self.csv_export(data)
 
-        for word, frequency in c.most_common(100):
+        for word, frequency in c.most_common(200):
         
             print('{} - {}'.format(word, frequency))
 
