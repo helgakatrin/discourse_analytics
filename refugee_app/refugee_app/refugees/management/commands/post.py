@@ -30,9 +30,12 @@ class Command(BaseCommand):
         word_list = []
 
         for post in posts:
-            words_in_post = post.split()
-            for word in words_in_post:
-                word_list.append(word)            
+
+            my_list.append(post[0])
+        
+        for sentence in my_list:
+            for word in sentence.split():
+                word_list.append(word)
 
         # Skoða algengustu orðin:
 
